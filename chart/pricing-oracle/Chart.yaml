@@ -1,0 +1,6 @@
+apiVersion: v2
+name: pricing-oracle
+description: A Helm chart for tft price oracle
+type: application
+version: 0.1.0
+appVersion: "1.0.0"
