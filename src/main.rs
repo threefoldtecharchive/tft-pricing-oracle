@@ -3,6 +3,8 @@ extern crate rocket;
 use reqwest;
 use rocket::serde::json::Json;
 use rocket::State;
+use rocket::http::Method;
+use rocket_cors::{AllowedOrigins, CorsOptions};
 use serde::{Deserialize, Serialize};
 use std::sync::Arc;
 use std::time::Duration;
@@ -19,9 +21,21 @@ async fn index(cl: &State<PriceClient>) -> Json<ApiResonse> {
 fn rocket() -> _ {
     let price_client = PriceClient::default();
     tokio::spawn(price_client.clone().start());
+
+    let cors = CorsOptions::default()
+    .allowed_origins(AllowedOrigins::all())
+    .allowed_methods(
+        vec![Method::Get, Method::Post, Method::Patch]
+            .into_iter()
+            .map(From::from)
+            .collect(),
+    )
+    .allow_credentials(true);
+
     rocket::build()
         .mount("/", routes![index])
         .manage(price_client)
+        .attach(cors.to_cors().unwrap())
 }
 
 #[derive(Serialize, Deserialize, Debug)]
