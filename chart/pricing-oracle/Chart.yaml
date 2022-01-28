@@ -3,4 +3,4 @@ name: pricing-oracle
 description: A Helm chart for tft price oracle
 type: application
 version: 0.1.1
-appVersion: "1.0.1"
+appVersion: "1.0.2"
